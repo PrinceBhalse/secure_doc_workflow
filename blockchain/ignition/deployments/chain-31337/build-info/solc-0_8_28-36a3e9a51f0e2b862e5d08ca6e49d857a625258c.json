@@ -1,0 +1,39 @@
+{
+  "_format": "hh3-sol-build-info-1",
+  "id": "solc-0_8_28-36a3e9a51f0e2b862e5d08ca6e49d857a625258c",
+  "solcVersion": "0.8.28",
+  "solcLongVersion": "0.8.28+commit.7893614a",
+  "userSourceNameMap": {
+    "contracts/DocumentRegistry.sol": "project/contracts/DocumentRegistry.sol"
+  },
+  "input": {
+    "language": "Solidity",
+    "settings": {
+      "evmVersion": "cancun",
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "outputSelection": {
+        "*": {
+          "": [
+            "ast"
+          ],
+          "*": [
+            "abi",
+            "evm.bytecode",
+            "evm.deployedBytecode",
+            "evm.methodIdentifiers",
+            "metadata"
+          ]
+        }
+      },
+      "remappings": []
+    },
+    "sources": {
+      "project/contracts/DocumentRegistry.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.20;\r\n\r\ncontract DocumentRegistry {\r\n    enum Status { Pending, SignedBySeller, SignedByBuyer, Completed }\r\n\r\n    struct Document {\r\n        string ipfsHash;      // The encrypted file location\r\n        address seller;\r\n        address buyer;\r\n        address intermediary; // The Law Firm\r\n        Status status;\r\n        bool exists;\r\n    }\r\n\r\n    mapping(string => Document) public documents;\r\n    event DocumentRegistered(string ipfsHash, address seller, address buyer);\r\n    event DocumentSigned(string ipfsHash, address signer, Status newStatus);\r\n\r\n    // 1. Seller registers the document and signs first\r\n    function registerDocument(string memory _ipfsHash, address _buyer, address _intermediary) public {\r\n        require(!documents[_ipfsHash].exists, \"Document already exists\");\r\n        \r\n        documents[_ipfsHash] = Document({\r\n            ipfsHash: _ipfsHash,\r\n            seller: msg.sender,\r\n            buyer: _buyer,\r\n            intermediary: _intermediary,\r\n            status: Status.SignedBySeller,\r\n            exists: true\r\n        });\r\n\r\n        emit DocumentRegistered(_ipfsHash, msg.sender, _buyer);\r\n    }\r\n\r\n    // 2. Buyer/Intermediary Signs\r\n    function signDocument(string memory _ipfsHash) public {\r\n        Document storage doc = documents[_ipfsHash];\r\n        require(doc.exists, \"Document not found\");\r\n        require(msg.sender == doc.buyer || msg.sender == doc.intermediary, \"Unauthorized\");\r\n\r\n        if (msg.sender == doc.buyer && doc.status == Status.SignedBySeller) {\r\n            doc.status = Status.SignedByBuyer;\r\n        } else if (msg.sender == doc.intermediary && doc.status == Status.SignedByBuyer) {\r\n            doc.status = Status.Completed;\r\n        }\r\n\r\n        emit DocumentSigned(_ipfsHash, msg.sender, doc.status);\r\n    }\r\n\r\n    function getStatus(string memory _ipfsHash) public view returns (Status) {\r\n        return documents[_ipfsHash].status;\r\n    }\r\n}"
+      }
+    }
+  }
+}
