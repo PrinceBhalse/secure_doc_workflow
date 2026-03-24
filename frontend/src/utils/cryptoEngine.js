@@ -23,3 +23,7 @@ export const encryptDocument = async (fileBuffer, rsaPublicKey) => {
         fileHash: CryptoJS.SHA256(encryptedFile).toString() // This goes to Blockchain
     };
 };
+
+export const hashDocument = async (fileBuffer) => {
+    return CryptoJS.SHA256(CryptoJS.lib.WordArray.create(fileBuffer)).toString();
+};
