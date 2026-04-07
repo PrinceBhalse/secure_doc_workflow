@@ -1,0 +1,34 @@
+﻿Γùç injected env (2) from .env // tip: Γîü auth for agents [www.vestauth.com]
+node.exe : [31m[1mError[22m[39m 
+[31m[1mHH303:[22m[39m Unrecognized task 'ignition'
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" 
+"C:\Users\Prince\AppData\Roaming ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([31m[1mError 
+   ...task 'ignition':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+HardhatError: HH303: Unrecognized task 'ignition'
+    at ArgumentsParser.parseScopeAndTaskNames (D:\secure-doc
+-workflow\blockchain\node_modules\hardhat\src\internal\cli\A
+rgumentsParser.ts:169:15)
+    at main (D:\secure-doc-workflow\blockchain\node_modules\
+hardhat\src\internal\cli\cli.ts:248:23)
+    at Object.<anonymous> (D:\secure-doc-workflow\blockchain
+\node_modules\hardhat\src\internal\cli\cli.ts:483:1)
+    at Module._compile 
+(node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load 
+(node:internal/modules/cjs/loader:1441:32)
+    at Function._load 
+(node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync 
+(node:diagnostics_channel:322:14)
+    at wrapModuleLoad 
+(node:internal/modules/cjs/loader:237:24)
+    at Module.require 
+(node:internal/modules/cjs/loader:1463:12)
