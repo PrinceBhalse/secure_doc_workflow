@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 import { CONTRACT_ADDRESS } from '../blockchain/contractAddress';
 import DocumentRegistryABI from '../blockchain/DocumentRegistry.json';
-import { PenTool, CheckCircle, Clock } from 'lucide-react';
+import { PenTool, CheckCircle, Clock, Download } from 'lucide-react';
 
 export default function DocumentTable({ account, filter }) {
   const [documents, setDocuments] = useState([]);
@@ -141,7 +141,7 @@ export default function DocumentTable({ account, filter }) {
                       {doc.statusIcon} {doc.displayStatus}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-right">
+                  <td className="px-6 py-4 text-right flex items-center justify-end space-x-3">
                     {doc.actionRequired ? (
                       <button 
                         onClick={() => signDocument(doc.hash)}
@@ -158,6 +158,16 @@ export default function DocumentTable({ account, filter }) {
                     ) : (
                       <span className="text-slate-500 text-sm italic pr-4">No action needed</span>
                     )}
+                    <a 
+                      href={`https://gateway.pinata.cloud/ipfs/${doc.hash}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-bold border border-border hover:bg-border transition-colors"
+                      title="Download/View Document"
+                    >
+                      <Download size={16} />
+                      <span className="hidden md:inline">View</span>
+                    </a>
                   </td>
                 </tr>
               ))}

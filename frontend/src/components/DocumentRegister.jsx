@@ -1,15 +1,17 @@
 import { useState, useRef } from 'react';
 import { ethers } from 'ethers';
+import axios from 'axios';
 import { CONTRACT_ADDRESS } from '../blockchain/contractAddress';
 import DocumentRegistryABI from '../blockchain/DocumentRegistry.json';
 import { UploadCloud, CheckCircle } from 'lucide-react';
-import { hashDocument } from '../utils/cryptoEngine';
+
 
 export default function DocumentRegister({ account }) {
   const [file, setFile] = useState(null);
   const [buyer, setBuyer] = useState('');
   const [intermediary, setIntermediary] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loadingText, setLoadingText] = useState('');
   const [isDragging, setIsDragging] = useState(false);
   const [successHash, setSuccessHash] = useState('');
 
@@ -25,21 +27,40 @@ export default function DocumentRegister({ account }) {
     }
   };
 
+  const uploadToIPFS = async (fileToUpload) => {
+    const formData = new FormData();
+    formData.append('file', fileToUpload);
+    const res = await axios.post("https://api.pinata.cloud/pinning/pinFileToIPFS", formData, {
+      headers: {
+        'Authorization': `Bearer ${process.env.REACT_APP_PINATA_JWT}`
+      }
+    });
+    return res.data.IpfsHash;
+  };
+
   const register = async () => {
     if (!file || !buyer || !intermediary) return alert("Missing fields!");
     setLoading(true);
     setSuccessHash('');
+    
+    let cid;
     try {
-      const buffer = await file.arrayBuffer();
-      const hash = await hashDocument(buffer);
+      setLoadingText('Uploading to Decentralized Storage...');
+      cid = await uploadToIPFS(file);
+    } catch (e) {
+      setLoading(false);
+      return alert("IPFS Upload Failed");
+    }
 
+    try {
+      setLoadingText('Processing Transaction...');
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
       const contract = new ethers.Contract(CONTRACT_ADDRESS, DocumentRegistryABI.abi, signer);
 
-      const tx = await contract.registerDocument(hash, buyer, intermediary);
+      const tx = await contract.registerDocument(cid, buyer, intermediary);
       await tx.wait();
-      setSuccessHash(hash);
+      setSuccessHash(cid);
       setFile(null);
       setBuyer('');
       setIntermediary('');
@@ -112,7 +133,7 @@ export default function DocumentRegister({ account }) {
             : 'bg-primary hover:bg-blue-600 text-white shadow-primary/25'
         }`}
       >
-        {loading ? "Processing Transaction..." : "Register & Sign First"}
+        {loading ? loadingText : "Register & Sign First"}
       </button>
 
       {successHash && (
