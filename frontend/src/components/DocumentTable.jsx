@@ -32,18 +32,18 @@ export default function DocumentTable({ account, filter }) {
         if (isParticipant) {
           const statusNum = Number(docInfo.status);
           
-          let displayStatus = 'Pending';
-          let statusColor = 'bg-warning/20 text-warning border-warning/30';
+          let displayStatus = 'Pending Buyer';
+          let statusColor = 'bg-primary/20 text-primary border-primary/30';
           let statusIcon = <Clock size={14} className="mr-1" />;
           
           if (statusNum === 3) {
-            displayStatus = 'Completed';
+            displayStatus = 'Legally Finalized';
             statusColor = 'bg-success/20 text-success border-success/30';
             statusIcon = <CheckCircle size={14} className="mr-1" />;
           } else if (statusNum === 2) {
-            displayStatus = 'Signed';
-            statusColor = 'bg-primary/20 text-primary border-primary/30';
-            statusIcon = <PenTool size={14} className="mr-1" />;
+            displayStatus = 'Awaiting Law Firm';
+            statusColor = 'bg-warning/20 text-warning border-warning/30';
+            statusIcon = <Clock size={14} className="mr-1" />;
           }
 
           const actionRequired = 
@@ -153,7 +153,13 @@ export default function DocumentTable({ account, filter }) {
                         }`}
                       >
                         <PenTool size={16} />
-                        <span>{signingHash === doc.hash ? 'Signing...' : 'Sign Now'}</span>
+                        <span>
+                          {signingHash === doc.hash 
+                            ? 'Processing...' 
+                            : (doc.intermediary.toLowerCase() === account.toLowerCase() 
+                                ? 'Verify & Finalize' 
+                                : 'Sign Now')}
+                        </span>
                       </button>
                     ) : (
                       <span className="text-slate-500 text-sm italic pr-4">No action needed</span>

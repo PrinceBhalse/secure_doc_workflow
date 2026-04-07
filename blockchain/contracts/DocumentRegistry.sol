@@ -39,9 +39,11 @@ contract DocumentRegistry {
         require(doc.exists, "Document not found");
         require(msg.sender == doc.buyer || msg.sender == doc.intermediary, "Unauthorized");
 
-        if (msg.sender == doc.buyer && doc.status == Status.SignedBySeller) {
+        if (msg.sender == doc.buyer) {
+            require(doc.status == Status.SignedBySeller, "Not ready for buyer signature");
             doc.status = Status.SignedByBuyer;
-        } else if (msg.sender == doc.intermediary && doc.status == Status.SignedByBuyer) {
+        } else if (msg.sender == doc.intermediary) {
+            require(doc.status == Status.SignedByBuyer, "Not ready for intermediary signature");
             doc.status = Status.Completed;
         }
 
