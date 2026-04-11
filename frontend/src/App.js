@@ -1,17 +1,18 @@
 import { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
+import { getProvider } from './blockchain/provider';
 import Layout from './components/Layout';
 import './index.css';
 
 function App() {
   const [account, setAccount] = useState("");
 
-  const ensureHardhatNetwork = async () => {
-    const hardhatChainId = '0x7A69'; 
+  const ensureSepoliaNetwork = async () => {
+    const sepoliaChainId = '0xAA36A7'; 
     try {
       await window.ethereum.request({
         method: 'wallet_switchEthereumChain',
-        params: [{ chainId: hardhatChainId }],
+        params: [{ chainId: sepoliaChainId }],
       });
     } catch (switchError) {
       if (switchError.code === 4902) {
@@ -19,10 +20,11 @@ function App() {
           await window.ethereum.request({
             method: 'wallet_addEthereumChain',
             params: [{
-              chainId: hardhatChainId,
-              chainName: 'Hardhat Local',
-              rpcUrls: ['http://127.0.0.1:8545'],
-              nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
+              chainId: sepoliaChainId,
+              chainName: 'Sepolia Testnet',
+              rpcUrls: ['https://rpc.sepolia.org'],
+              nativeCurrency: { name: 'Sepolia Ether', symbol: 'ETH', decimals: 18 },
+              blockExplorerUrls: ['https://sepolia.etherscan.io'],
             }],
           });
         } catch (addError) {
@@ -35,8 +37,8 @@ function App() {
   const connectWallet = async () => {
     if (window.ethereum) {
       try {
-        await ensureHardhatNetwork();
-        const provider = new ethers.BrowserProvider(window.ethereum);
+        await ensureSepoliaNetwork();
+        const provider = getProvider();
         const signer = await provider.getSigner();
         const address = await signer.getAddress();
         setAccount(address);

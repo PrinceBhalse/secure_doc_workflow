@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { ethers } from 'ethers';
 import axios from 'axios';
+import { getProvider } from '../blockchain/provider';
 import { CONTRACT_ADDRESS } from '../blockchain/contractAddress';
 import DocumentRegistryABI from '../blockchain/DocumentRegistry.json';
 import { UploadCloud, CheckCircle } from 'lucide-react';
@@ -54,7 +55,7 @@ export default function DocumentRegister({ account }) {
 
     try {
       setLoadingText('Processing Transaction...');
-      const provider = new ethers.BrowserProvider(window.ethereum);
+      const provider = getProvider();
       const signer = await provider.getSigner();
       const contract = new ethers.Contract(CONTRACT_ADDRESS, DocumentRegistryABI.abi, signer);
 

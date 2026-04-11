@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
+import { getProvider } from '../blockchain/provider';
 import { CONTRACT_ADDRESS } from '../blockchain/contractAddress';
 import DocumentRegistryABI from '../blockchain/DocumentRegistry.json';
 import { PenTool, CheckCircle, Clock, Download } from 'lucide-react';
@@ -12,7 +13,7 @@ export default function DocumentTable({ account, filter }) {
   const fetchDocuments = async () => {
     setLoading(true);
     try {
-      const provider = new ethers.BrowserProvider(window.ethereum);
+      const provider = getProvider();
       const contract = new ethers.Contract(CONTRACT_ADDRESS, DocumentRegistryABI.abi, provider);
       
       const eventFilter = contract.filters.DocumentRegistered();
@@ -83,7 +84,7 @@ export default function DocumentTable({ account, filter }) {
   const signDocument = async (hash) => {
     setSigningHash(hash);
     try {
-      const provider = new ethers.BrowserProvider(window.ethereum);
+      const provider = getProvider();
       const signer = await provider.getSigner();
       const contract = new ethers.Contract(CONTRACT_ADDRESS, DocumentRegistryABI.abi, signer);
       
