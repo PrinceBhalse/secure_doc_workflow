@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { ethers } from 'ethers';
 import { getProvider } from './blockchain/provider';
 import Layout from './components/Layout';
 import './index.css';
