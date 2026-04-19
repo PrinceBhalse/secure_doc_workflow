@@ -20,7 +20,7 @@ export default function Layout({ account, connectWallet }) {
       <aside className="w-64 bg-surface border-r border-border flex flex-col z-20 shadow-xl">
         <div className="p-6">
           <h1 className="text-xl font-bold flex items-center space-x-2 text-white">
-            <span>🛡️ Notary Dashboard</span>
+            <span>🛡️ Veritas</span>
           </h1>
         </div>
         <nav className="flex-1 py-4">
