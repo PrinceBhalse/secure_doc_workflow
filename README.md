@@ -69,3 +69,7 @@ Connect your MetaMask widget to the Localhost:8545 network, import one of the Ha
 
 ### Thumbnail
 <img width="1376" height="768" alt="thumbnail" src="https://github.com/user-attachments/assets/90ff324c-e1f4-4b16-b3ba-9139973fa330" />
+
+### Preview
+<img width="1912" height="913" alt="preview" src="https://github.com/user-attachments/assets/eca60844-f3a2-4815-842c-fe4cd7c344cb" />
+
