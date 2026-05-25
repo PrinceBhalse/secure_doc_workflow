@@ -65,3 +65,7 @@ cd frontend
 npm start
 ```
 Connect your MetaMask widget to the Localhost:8545 network, import one of the Hardhat private wallets, and you are ready to begin registering and signing documents.
+
+
+### 4. Preview
+<img width="1376" height="768" alt="preview" src="https://github.com/user-attachments/assets/90ff324c-e1f4-4b16-b3ba-9139973fa330" />
